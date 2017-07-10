@@ -1,0 +1,14 @@
+
+int Min = 100000000;
+int Pos = 0;
+
+for (int i=0; i<num; i++)
+{
+  if (array[i] < Min)
+  {
+     Min=array[i];
+     Pos=i;
+  }
+}
+
+

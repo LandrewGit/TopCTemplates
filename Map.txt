@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+#include <set>
+#include <sstream>
+#define FOR(i,n) for(int i=0;i<(int)n;i++)
+#define REP(i,f,t) for(int i=f;i<=t;i++)
+#define debln(a) cout<< #a <<" : " << a << endl;
+#define ALL(a) a.begin(),a.end()
+using namespace std;
+ 
+class ServiceNames {
+  public:
+
+map< string, set<string> > m;
+  vector <string> makeList(vector <string> s) {
+    FOR(i,s.size()) {
+      string a,b;
+      istringstream iss(s[i]);
+      iss >> a;
+      while(iss >> b) {
+        m[b].insert(a);
+      }
+    }
+    vector< string > v;
+    for(map<string, set<string> >::iterator it = m.begin(); it != m.end(); ++it) {
+      string cs = (*it).first + " ==> ";
+      for(set<string>::iterator it2=(*it).second.begin(); it2 != (*it).second.end(); ++it2) {
+        cs += (*it2) + ", ";
+      }
+      cs = cs.substr(0,(int)cs.size() - 2);
+      v.push_back(cs);
+    }
+    return v;
+  }

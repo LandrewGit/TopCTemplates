@@ -1,0 +1,18 @@
+//int Books::sortMoves(vector <string> t) {
+
+int n = t.size();
+
+vector <int> len(n,1);
+vector <int> prev(n,-1);
+
+for (int i=1; i<n; i++)
+{
+   for (int j=0; j<i; j++)
+   {
+     if (t[j] <= t[i] && len[j] + 1 > len[i])
+     {
+        len[i]  = len[j] + 1;
+        prev[i] = j;
+     }
+   }
+}

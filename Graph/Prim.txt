@@ -1,0 +1,42 @@
+      //no edge is greater than 100000
+      int dis[101][101];
+
+      vector <bool> vis(n, false);   //is it in current tree
+	vector <int>  dist(n, 100001); //distance to current tree
+	vector <int> pred(n, -1);      //predecessor in current tree
+
+	int trSize = 1;
+	long long trCost =0;
+	vis[0]=true;
+
+	for (int i=1; i<n; i++)
+	{
+        dist[i]=dis[0][i];
+	  pred[i]=0;
+	}
+
+	while (trSize < n)
+	{
+        int bes = 100001;
+	  int besind = 0;
+        for (int i=0; i<n; i++)
+	  {
+         if (!vis[i] && dist[i] < bes)
+		 {
+			 bes = dist[i];
+			 besind = i;
+		 }
+	  }
+	  trSize++;
+	  trCost = trCost + dist[besind];
+        vis[besind]=true;
+
+	  for (int i=0; i<n; i++)
+	  {
+		if (!vis[i] && dist[i] > dis[i][besind])
+		{
+               dist[i]=dis[i][besind];
+		   pred[i]=besind;
+		}
+	  }
+	}

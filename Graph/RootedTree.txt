@@ -1,0 +1,33 @@
+//vector <string> gr - "YNN,NNN, NNY"
+//int tar - index of root node
+
+int n = gr.size();
+vector <vector <int> > chil(50);
+
+
+vector <bool> vis(n, false);
+vector <int> cur;
+cur.push_back(tar);
+vis[tar]=true;
+
+while (cur.size() != 0)
+{
+     vector <int> newc;
+     newc.clear();
+    for (int i=0; i<cur.size(); i++)
+   {
+        int v = cur[i];
+        for (int j=0; j<n; j++)
+       {
+           if (gr[v][j] == 'Y' && !vis[j])
+          {
+              vis[j] = true;
+              newc.push_back(j);
+              chil[v].push_back(j);
+          }
+       }
+   }
+   cur.clear();
+   cur = newc;
+}
+

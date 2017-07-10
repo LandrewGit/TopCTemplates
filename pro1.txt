@@ -1,0 +1,34 @@
+#include <string> 
+#include <vector> 
+#include <set> 
+#include <map> 
+#include <queue>
+#include <stack> 
+#include <deque> 
+#include <list>
+#include <iterator>
+#include <algorithm> 
+#include <cstdlib> 
+#include <cstdio> 
+#include <cctype> 
+#include <cmath> 
+#include <iostream>
+#include <sstream>
+#include <utility>
+#include <numeric>
+#include <complex>
+
+#define REPSZ(i, a) for(int i = 0; i < (a).size(); i++) 
+
+using namespace std; 
+
+const std::string::size_type NPOS = std::string::npos;
+
+const double EPS = 1e-8;
+
+class   {
+
+public:
+
+}
+};

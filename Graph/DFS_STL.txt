@@ -1,0 +1,23 @@
+/*
+Reminder from Part 1:
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+*/
+
+ int N; // number of vertices 
+ vvi W; // graph 
+ vi V; // V is a visited flag 
+ 
+ void dfs(int i) { 
+       if(!V[i]) { 
+            V[i] = true; 
+            for_each(all(W[i]), dfs); 
+       } 
+ } 
+  
+ bool check_graph_connected_dfs() { 
+       int start_vertex = 0; 
+       V = vi(N, false); 
+       dfs(start_vertex); 
+       return (find(all(V), 0) == V.end()); 
+ } 

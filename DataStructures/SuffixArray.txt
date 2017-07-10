@@ -1,0 +1,208 @@
+#define MAXN 1<<17 
+#define MAXLG 17 
+
+char A[MAXN]; 
+char T[1001];
+
+struct entry { int nr[2], p; } L[MAXN]; 
+
+// P[k][i] - position of suffix starting at i, considering length 2^k
+int P[MAXLG][MAXN], N, i, stp, cnt; 
+
+int q;
+int M;
+
+// MapP[i] - where ith longest suffix starts
+int MapP[MAXN];
+
+// ArrayLCP[i] = lcp(i,i+1)
+int ArrayLCP[MAXN];
+
+int cmp(struct entry a, struct entry b) 
+
+{ 
+    return a.nr[0] == b.nr[0] ? (a.nr[1] < b.nr[1] ? 1 : 0) : (a.nr[0] < b.nr[0] ? 1 : 0); 
+} 
+
+void computeSuffix()
+{
+   //memset(P, 0, sizeof(P));
+
+   for (int i = 0; i < N; i++)
+   {
+      P[0][i] = A[i] - 'A'; 
+   }
+
+   for (stp = 1, cnt = 1; cnt >> 1 < N; stp++, cnt <<= 1) 
+   { 
+     for (int i = 0; i < N; i++) 
+     { 
+        L[i].nr[0] = P[stp - 1][i]; 
+        L[i].nr[1] = i + cnt < N ? P[stp - 1][i + cnt] : -1; 
+        L[i].p = i; 
+     } 
+
+     sort(L, L + N, cmp); 
+
+     for (int i = 0; i < N; i ++) 
+	 {
+       P[stp][L[i].p] = i > 0 && L[i].nr[0] == L[i - 1].nr[0] && L[i].nr[1] == L[i - 1].nr[1] ? P[stp][L[i - 1].p] : i; 
+	 }
+   }
+
+   for (int i=0; i<N; i++)
+	 MapP[P[stp-1][i]]=i;
+ } 
+
+int lcp(int x, int y) 
+{ 
+   int k, ret = 0; 
+
+   if (x == y) 
+	  return N - x; 
+
+   for (k = stp - 1; k >= 0 && x < N && y < N; k --) 
+   {
+      if (P[k][x] == P[k][y]) 
+	  {
+         x += 1 << k;
+		 y += 1 << k;
+		 ret += 1 << k;
+	  }
+   }
+
+   return ret; 
+} 
+
+void compArrayLCP()
+{
+  for (int i=0; i<N-1; i++)
+	  ArrayLCP[i] = lcp(MapP[i], MapP[i+1]);
+}
+
+// -1 if PAT < A, 0 if PAT == A, 1 if PAT > A
+int compPos(char* PAT, int ind)
+{
+   int curInd = 0;
+   int indInA = MapP[ind];
+   int NN = N - indInA;
+   while ( curInd < M && curInd < NN )
+   {
+      if ( PAT[curInd] < A[indInA + curInd] )
+		  return -1;
+	  else if ( PAT[curInd] > A[indInA + curInd] )
+		  return 1;
+	  else
+		  curInd++;
+   }
+
+   if ( M > NN )
+	   return 1;
+   return 0;
+}
+
+// returns index in P, or -1 if no match
+int sufSearch(char* PAT)
+{
+   int lb = 0;
+   int ub = N-1;
+   int mid = (lb+ub)/2;
+
+   while ( ub - lb > 5 )
+   {
+     int cmpres = compPos(PAT, mid);
+     if ( cmpres == 0 )
+		 return MapP[mid];
+	 else if ( cmpres < 0 )
+	 {
+        ub = mid;
+		mid = (lb+ub)/2;
+	 }
+	 else
+	 {
+        lb = mid;
+		mid = (lb+ub)/2;
+	 }
+   }
+   for ( int i = lb; i <= ub; i++)
+   {
+     int cmpres = compPos(PAT, i);
+	 if ( cmpres == 0 )
+		 return MapP[i];
+   }
+
+   return -1;
+}
+
+int sufSearchLower(char* PAT)
+{
+   int lb = 0;
+   int ub = N-1;
+   int mid = (lb+ub)/2;
+
+   int cmpres = compPos(PAT, lb);
+   if ( cmpres == 0 )
+	   return MapP[lb];
+
+   while ( ub - lb > 5 )
+   {
+     int cmpres = compPos(PAT, mid);
+
+	 if ( cmpres <= 0 )
+	 {
+        ub = mid;
+		mid = (lb+ub)/2;
+	 }
+	 else
+	 {
+        lb = mid;
+		mid = (lb+ub)/2;
+	 }
+   }
+
+   for ( int i = lb; i <= ub; i++)
+   {
+     int cmpres = compPos(PAT, i);
+	 if ( cmpres == 0 )
+		 return MapP[i];
+   }
+
+   return -1;
+}
+
+int sufSearchUpper(char* PAT)
+{
+   int lb = 0;
+   int ub = N-1;
+   int mid = (lb+ub)/2;
+
+   int cmpres = compPos(PAT, ub);
+   if ( cmpres == 0 )
+	   return MapP[ub];
+
+   while ( ub - lb > 5 )
+   {
+     int cmpres = compPos(PAT, mid);
+
+	 if ( cmpres < 0 )
+	 {
+        ub = mid;
+		mid = (lb+ub)/2;
+	 }
+	 else
+	 {
+        lb = mid;
+		mid = (lb+ub)/2;
+	 }
+   }
+
+   for ( int i = ub; i >= lb; i--)
+   {
+     int cmpres = compPos(PAT, i);
+	 if ( cmpres == 0 )
+		 return MapP[i];
+   }
+
+   return -1;
+}
+

@@ -1,0 +1,7 @@
+vector <int>::iterator temp;
+  
+   //prints elements of vec separated by spaces
+   for (temp=theArray.begin(); temp < theArray.end(); temp++)
+      cout << *temp << "\t";
+   cout << "\n";
+

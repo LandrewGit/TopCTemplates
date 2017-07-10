@@ -1,0 +1,60 @@
+
+// Extended Euclidean algorithm from Wikipedia
+// Ax + By = gcd(A, B)
+int gcd(int A, int B, int *X, int *Y) {
+    int x, y, u, v, m, n, a, b, q, r;
+ 
+    /* B = A(0) + B(1) */
+    x = 0; y = 1;
+ 
+    /* A = A(1) + B(0) */
+    u = 1; v = 0;
+ 
+    for (a = A, b = B; 0 != a; b = a, a = r, x = u, y = v, u = m, v = n) {
+        /* b = aq + r and 0 <= r < a */
+        q = b / a;
+        r = b % a;
+ 
+        /* r = Ax + By - aq = Ax + By - (Au + Bv)q = A(x - uq) + B(y - vq) */
+        m = x - (u * q);
+        n = y - (v * q); 
+    }   
+ 
+    /* Ax + By = gcd(A, B) */
+    *X = x; *Y = y;
+ 
+    return b;
+}
+
+// x = a_i mod  n_i
+int CRT(vector<int> a, vector <int> n)
+{
+   int k = a.size();
+   int N = 1;
+   for (int i=0; i<k; i++)
+      N = N*n[i];
+
+   vector <int> r(k,0);
+   vector <int> s(k,0);
+   vector <int> e(k,0);
+
+   for (int i=0; i<k; i++)
+   {
+      gcd(n[i], (N/(n[i])), &r[i], &s[i]);
+      e[i]=s[i]*N/(n[i]);
+   }
+
+   int x = 0;
+   for (int i=0; i<k; i++)
+   {
+       x = x + a[i]*e[i];
+   }
+
+   // Note - might be slow, use % + N
+   if ( x < 0 )
+   {
+     while (x < 0)
+	   x = x + N;
+   }
+   return x;
+} 

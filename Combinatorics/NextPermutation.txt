@@ -1,0 +1,8 @@
+ vector <int> pe;
+ for (int i=0; i<k; i++)
+   pe.push_back(i);
+
+ do
+ {
+
+ } while (next_permutation(pe.begin(),pe.end()));

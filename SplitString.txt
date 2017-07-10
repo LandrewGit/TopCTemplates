@@ -1,0 +1,19 @@
+
+
+vector<string> SPLIT(string s, string del = " ", bool f = false)
+{ 
+   s += del[0];
+   string w = ""; 
+   vector<string> res; 
+   for(string::iterator it = s.begin(); it != s.end(); ++it)
+   { 
+        if  (find(del.begin(), del.end(), *it) == del.end())
+           w += *it; 
+       else if (f || w != "")
+       { 
+            res.push_back(w); 
+            w = ""; 
+       } 
+  } 
+  return res;
+} 

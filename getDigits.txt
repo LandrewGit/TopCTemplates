@@ -1,0 +1,9 @@
+
+int count[10];
+memset (count,0,sizeof(count));
+
+int numTemp = num;
+for ( ; numTemp; numTemp /=10)
+  count[numTemp%10]++;
+
+

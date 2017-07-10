@@ -1,0 +1,207 @@
+#include <string>
+#include <queue>
+#include <iterator>
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <deque>
+#include <stack>
+#include <bitset>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <cctype>
+#include <complex>
+ 
+#define REPSZ(i, a) for(int i = 0; i < (a).size(); i++) 
+ 
+using namespace std;
+ 
+const std::string::size_type NPOS = std::string::npos;
+ 
+const double EPS = 1e-8;
+ 
+ 
+class MagicalSpheres {
+public:
+  int divideWork(int, int, int);
+};
+ 
+vector <int> prim;
+map <int,int> primp;
+ 
+void genpr()
+{
+ 
+prim.push_back(2);
+  
+int curPr = 2;
+int j = 2;
+ 
+while (j <= 100001 )
+{  
+   bool fou = false;
+   j = curPr+1;
+   while (!fou)
+   {
+     bool locFou = false;
+     for (int p=0; p<prim.size() && !locFou; p++)
+     {
+        if (j%prim[p] == 0)
+        {
+         locFou = true;
+        }
+     }
+     if (locFou)
+      j++;
+     else
+     {
+      fou = true;
+      curPr = j;
+      if (j <= 100001)
+        prim.push_back(j);
+      //cout << j << endl;
+     }
+   }
+}
+ 
+}
+ 
+vector <pair<int, int> > po(int x)
+{
+  vector <pair<int, int> > res;
+  res.clear();
+  
+  int ind = 0;
+  while (x > 1)
+  {
+    if (x%prim[ind] == 0)
+    {
+      x = x/prim[ind];
+      int nu = 1;
+      while (x%prim[ind] == 0)
+      {
+        x = x/prim[ind];
+        nu++;
+      }
+      pair <int, int> L;
+      L.first=prim[ind];
+      L.second=nu;
+      res.push_back(L);
+    }
+    ind++;
+  }
+  
+  return res;
+}
+ 
+vector <int> ba(int m, int prr)
+{
+  vector <int> rres;
+  rres.clear();
+  while ( m > 0)
+  {
+    int re = m%prr;
+    rres.push_back(re);
+    m = (m-re)/prr;
+  }
+  //reverse (rres.begin(), rres.end());
+  return rres;
+}
+ 
+long long ca(int m, int n, int prr)
+{
+  vector <int> cm = ba(m,prr);
+  vector <int> cn = ba(n,prr);
+  
+  int ma = max(cm.size(), cn.size()) + 1;
+  
+  vector <int> cs(ma, 0);
+  vector <int> ncm(ma,0);
+  vector <int> ncn(ma,0);
+ 
+  for (int i=0; i<cm.size(); i++)
+  {
+    ncm[i] = cm[i];
+    if (prr==3)
+     cout << cm[i] << endl;
+  }
+
+  for (int i=0; i<cn.size(); i++)
+    ncn[i] = cn[i];
+  
+  
+  int nc = 0;
+  int car = 0;
+  int ind = 0;
+  while (ind < ma)
+  {
+    if (ncm[ind] + ncn[ind] + car < prr)
+     car = 0;
+    else
+    {
+      if (prr == 3)
+       cout << ind << " " << ncm[ind] << " " << ncn[ind] << endl;
+      car = 1;
+      nc++;
+    } 
+    ind++; 
+  }
+  
+  return nc;
+}
+ 
+void genpp(int sc, int fs)
+{
+  for (int i=0; i<prim.size(); i++)
+  {
+    primp[prim[i]] = ca(sc,fs,prim[i]);
+  }
+} 
+ 
+int MagicalSpheres::divideWork(int sc, int fs, int ga) {
+  
+  genpr();
+  genpp(sc,fs);
+  
+  cout << primp[2] << endl;
+  
+  bool fou = false;
+  int ind = 0;
+  for (int i=ga; i>1 && !fou; i--)
+  {
+    bool lfou = true;
+    vector <pair<int, int> > p;
+    p = po(i);
+    for (int j=0; j<p.size() && lfou; j++)
+    {
+       pair <int, int> L = p[j];
+       long long nc = primp[L.first];
+       if (nc < L.second)
+       {
+        //if (i==99999)
+        // cout << L.first<< " " << L.second << " " << nc << endl;
+        lfou = false;
+       } 
+    }
+    if (lfou)
+    {
+     fou = true;
+     ind = i;
+    } 
+  }
+  
+  if (fou)
+   return ind;
+  else
+   return 1;
+}

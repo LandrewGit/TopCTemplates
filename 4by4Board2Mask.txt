@@ -1,0 +1,49 @@
+int board2num(vector <vector <int> > board)
+{
+  int num = 0;
+  int p = 1;
+  for (int i=0; i<4; i++)
+  {
+    for (int j=0; j<4; j++)
+    {
+      num = num + p*board[i][j];
+      p=p*2; 
+    }
+  }
+  return num;
+}
+
+
+vector <vector <int> > num2board(int num)
+{
+  vector <vector <int> > board(4);
+  int p = 1;
+  for (int i=0; i<4; i++)
+  {
+    for (int j=0; j<4; j++)
+    {
+      int k = 0;
+      if ( (p & num) > 0)
+       k = 1;
+      board[i].push_back(k);
+      p = p*2;
+    }
+  }
+  return board;
+}
+
+
+/* Input ***************************/
+int maxScore(vector <string> lay){
+
+vector <vector <int> > board(4);
+for (int i=0; i<4; i++)
+{
+  for (int j=0; j<4; j++)
+  {
+     if (lay[i][j] == '#')
+      board[i].push_back(1);
+     else
+      board[i].push_back(0);
+  }
+}

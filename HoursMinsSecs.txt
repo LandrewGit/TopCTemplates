@@ -1,0 +1,3 @@
+
+sscanf(timestamp,"%d:%d:%d",&h,&m,&s);
+s=s+m*60+h*3600;

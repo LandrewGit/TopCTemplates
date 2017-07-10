@@ -1,0 +1,33 @@
+vector <int> prim;
+
+prim.push_back(2);
+  
+int curPr = 2;
+int j = 2;
+
+while (j <= upperBound )
+{  
+   bool fou = false;
+   j = curPr+1;
+   while (!fou)
+   {
+     bool locFou = false;
+     for (int p=0; p<prim.size() && !locFou; p++)
+     {
+        if (j%prim[p] == 0)
+        {
+         locFou = true;
+        }
+     }
+     if (locFou)
+      j++;
+     else
+     {
+      fou = true;
+      curPr = j;
+      if (j <= upperBound)
+        prim.push_back(j);
+      //cout << j << endl;
+     }
+   }
+}

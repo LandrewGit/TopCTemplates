@@ -1,0 +1,47 @@
+int Area2(int x1, int y1, int x2, int y2, int x3, int y3) 
+{ 
+  return ( (x2-x1)*(y3-y1)-(x3-x1)*(y2-y1) ); 
+} 
+
+bool LeftOn(int x1, int y1, int x2, int y2, int x3, int y3) 
+{ 
+  return ( Area2(x1, y1, x2, y2, x3, y3) >= 0); 
+} 
+
+
+
+//Computing CH
+
+vector <vector <int> > ext1; 
+
+
+int n = x1.size();  
+
+for (int i=0; i<n; i++) 
+{ 
+  for (int j=0; j<n; j++) 
+  { 
+    if (i!=j) 
+    { 
+       bool ext = true; 
+       for (int k=0; k<n && ext; k++) 
+       { 
+          if (i!=k && j!=k) 
+          { 
+             if ( !LeftOn(x1[i], y1[i], x1[j], y1[j], x1[k], y1[k]) ) 
+              ext = false;  
+          } 
+       } 
+       if (ext) 
+       { 
+          vector <int> L; 
+          L.clear(); 
+          L.push_back(x1[i]); 
+          L.push_back(y1[i]); 
+          L.push_back(x1[j]); 
+          L.push_back(y1[j]); 
+          ext1.push_back(L); 
+       }         
+    } 
+  } 
+} 

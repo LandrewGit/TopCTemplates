@@ -1,0 +1,8 @@
+vector <string> V;
+string a;
+istringstream iss(inputString);
+while(iss >> a) 
+{
+  V.push_back(a);
+}
+

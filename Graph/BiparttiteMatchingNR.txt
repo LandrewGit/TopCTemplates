@@ -1,0 +1,91 @@
+class RookAttack
+ {     // a list of the non-empty squares for each row
+   vector lst[300];
+   // in this arrays we keep matches found to every row and column
+   int row_match[300], col_match[300]; 
+   // we search for an augmenting path starting with row source
+   bool find_match(int source) {
+     // from[x] = the row-vertex that precedes x in the path
+     int from[300], where, match;
+     memset(from, -1, sizeof(from));
+     from[source] = source;
+     deque q;
+     q.push_back(source);
+     bool found_path = false;
+     while (!found_path && !q.empty()) {
+       // where = current row-vertex we are in   
+       where = q.front(); q.pop_front();
+       // we take every uncut square in the current row
+       for (int i = 0; i < lst[where].size(); ++ i) {
+         match = lst[where][i];
+         // next = the row matched with column match
+         int next = col_match[match];
+         if (where != next) {
+           // no row matched with column match thus 
+we found an augmenting path
+           if (next == -1) {
+             found_path = true;
+             break;
+           }
+           // a check whether we already visited 
+the row-vertex next 
+           if (from[next] == -1) {
+             q.push_back(next);
+             from[next] = where;
+           }
+         }
+       }
+     }
+     if (!found_path)
+       return false;
+     while (from[where] != where) {
+       // we de-match where from its current match (aux) 
+and match it with match
+       int aux = row_match[where];
+       row_match[where] = match;
+       col_match[match] = where;
+       where = from[where];
+       match = aux;
+     }
+     // at this point where = source
+     row_match[where] = match;
+     col_match[match] = where;
+     return true;
+   }
+
+   public: 
+   int howMany(int rows, int cols, vector  cutouts) 
+   {  // build lst from cutouts; column j should appear in 
+row's i list if square (i, j) is present on the board 
+
+      int ret = 0;
+      memset(row_match, -1, sizeof(row_match));
+      memset(col_match, -1, sizeof(col_match));
+      // we try to find a match for each row  
+      for (int i = 0; i < rows; ++ i) 
+        ret += find_match(i);
+      return ret;
+   }  
+ };
+
+
+#####################################################################
+
+Using DFS (BFS finds shortest augmenting path)
+
+ bool find_match(int where) {
+     // the previous column was not matched
+     if (where == -1)
+       return true;
+     for (int i = 0; i < lst[where].size(); ++ i) {
+       int match = lst[where][i];
+       if (visited[match] == false) {
+         visited[match] = true;
+         if (find_match(col_match[match])) {
+           col_match[match] = where;
+           return true;
+         }
+       }
+     }
+     return false;
+   }

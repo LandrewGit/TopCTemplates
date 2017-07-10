@@ -1,0 +1,8 @@
+#define FOREACH(i,v) for (typeof((v).begin()) i = (v).begin(); i!=(v).end(); i++)
+
+/* i points to a string "16000 100 10" */
+
+FOREACH(i, cars)
+   stringstream ss(*i);
+   int pc, tax, fe;
+   ss >> pc >> tax >> fe;

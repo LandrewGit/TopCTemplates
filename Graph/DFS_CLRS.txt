@@ -1,0 +1,41 @@
+int color[n];
+int pred[n];
+int f[n];    \\finishing time
+int d[n];    \\discovery time
+
+int time;
+
+memset(color, 0, sizeof(color));
+memset(pred, 0, sizeof(pred));
+memset(f, 0, sizeof(f));
+memset(d, 0, sizeof(d));
+
+time = 0;
+
+void dfs_visit(int u)
+{
+  color[u]=1;
+  time++;
+  d[u]=time;
+  for (int j=0; j<Adj[u]; j++)  \\explore edge (u,v)
+  { 
+    int v = Adj[u][j];
+    if (color[v] == 0)
+    {
+      pred[v]=u;
+      dfs_visit(v);  
+    } 
+  }
+  color[u]=2;
+  time++;
+  f[u]=time;
+}
+
+void dfs()
+{
+  for (int i=0; i<n; i++)
+  {
+    if (color[i] == 0)
+      dfs_visit(i);
+  }
+}

@@ -1,0 +1,88 @@
+int bfs(int source) {
+	bool visited[NMax];
+	memset(visited, false, sizeof(visited));
+	visited[source] = true;
+	int from[NMax];
+	memset(from, -1, sizeof(from));
+	deque<int> Q;
+	Q.push_back(source);
+ 
+	while (!Q.empty()) {
+		int where = Q.front(); Q.pop_front();
+		bool found = false;
+                // lst[where] = the adjacency list of vertex where
+		for (int i = 0; i < lst[where].size(); ++ i) {
+			int next = lst[where][i];
+			if (!visited[next] && capacity[where][next] > 0) {
+				Q.push_back(next);
+				visited[next] = true;
+				from[next] = where;
+				if (next == sink) {
+					found = true;
+					break;
+				}
+			}
+		}
+		if (found) break;
+	}
+ 
+	int where = sink, nflow = INFINITY;
+	while (from[where] > -1) {
+		int prev = from[where];
+		nflow = min(nflow, capacity[prev][where]);
+		where = prev;
+	}
+	where = sink;
+	while (from[where] > -1) {
+		int prev = from[where];
+		capacity[prev][where] -= nflow;
+	        capacity[where][prev] += nflow;
+		where = prev;
+	}
+	return nflow == INFINITY ? 0 : nflow;
+}
+
+
+
+struct node {
+	int at, cost;
+	node(int at1, int cost1): at(at1), cost(cost1) {};
+};
+bool operator < (node a, node b) {
+	return a.cost > b.cost;
+}
+ 
+int pfs(int source) {
+	int from[NMax];
+	memset(from, -1, sizeof(from));
+	int bst[NMax];
+	memset(bst, 0, sizeof(bst));
+	bst[source] = INFINITY;
+	priority_queue<node> pq;
+	pq.push(node(source, INFINITY));
+ 
+	while (!pq.empty()) {
+		int where = pq.top().at, cst = pq.top().cost; 
+		pq.pop();
+		if (bst[where] < cst) continue;
+		if (where == sink) break;
+		for (int i = 0; i < lst[where].size(); ++ i) {
+			int next = lst[where][i];
+			int ncost = min(cst, capacity[where][next]);
+			if (bst[next] < ncost) {
+				bst[next] = ncost;
+				pq.push(node(next, ncost));
+				from[next] = where;
+			}
+		}
+	}
+ 
+	int where = sink;
+	while (from[where] > -1) {
+		int prev = from[where];
+		capacity[prev][where] -= bst[sink];
+		capacity[where][prev] += bst[sink];
+		where = prev;
+	}
+	return bst[sink];
+}

@@ -1,0 +1,24 @@
+    int N;
+    fin >> N;
+    
+	vector <int> frs(7,0);
+	int ds[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	int cou = 0;
+
+	for (int ye=1900; ye<1900+N; ye++)
+	{
+      vector <int> dsl(ds, ds + sizeof(ds)/sizeof(ds[0]));
+      if (ye%4 == 0 && (ye%100!=0 || ye%400==0))
+	    dsl[1]=29;
+      for (int mo=0; mo<12; mo++)
+	  {
+         for (int da=0; da<dsl[mo]; da++)
+		 {
+            if (da == 12)
+			{
+              frs[cou%7]++;
+			}
+			cou++;
+		 }
+	  }
+	}

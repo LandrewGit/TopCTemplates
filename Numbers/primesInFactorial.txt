@@ -1,0 +1,13 @@
+function to compute the exponent of the given prime factor of n!:
+
+long count(long p, long n)
+{
+        long res =0;
+        long q=p;
+        while(q<=n)
+        {
+            res+=n/q;
+            q*=p;
+        }
+        return res;
+}

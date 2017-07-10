@@ -1,0 +1,12 @@
+ vector <string> vs;
+ 
+for (int i=0;i<vs.size();i++) 
+{ 
+      istringstream sin(vs[i]); 
+      vector<int> L; 
+      L.clear(); 
+      int v; 
+      while (sin>>v) 
+        L.push_back(v); 
+} 
+

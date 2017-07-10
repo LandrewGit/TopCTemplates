@@ -1,0 +1,8 @@
+bool vow(char s)
+{
+  if (s == 'a' || s == 'o' || s == 'i' || s == 'u' || s == 'e' ||
+      s == 'A' || s == 'O' || s == 'I' || s == 'U' || s == 'E' )
+     return true;
+  else
+     return false;
+}

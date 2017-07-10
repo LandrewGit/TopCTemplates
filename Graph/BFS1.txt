@@ -1,0 +1,124 @@
+class RollingBlock  {
+
+public:
+
+int dist[100][100][3];
+queue < vector <int> > Q;
+int N, M;
+
+void addQ(int x, int y, int st)
+{
+   vector <int> L;
+   L.push_back(x);
+   L.push_back(y);
+   L.push_back(st);
+   Q.push(L);
+   cout << x << "\t" << y << "\t" << st << endl;
+}
+
+void addN(vector <int> cur)
+{
+   int x = cur[0];
+   int y = cur[1];
+   int st = cur[2];
+   int dis = dist[x][y][st];
+   
+   if (st == 0)
+   {
+      if (x-3>=0 && dist[x-2][y][1] == -1)
+      {
+       dist[x-2][y][1] = dis+1;
+       addQ(x-2,y,1);
+      }
+      if (x+3<M && dist[x+2][y][1] == -1)
+      {
+       dist[x+2][y][1] = dis+1;
+       addQ(x+2,y,1);
+      }
+      if (y-3>=0 && dist[x][y-2][2] == -1)
+      {
+       dist[x][y-2][2] = dis+1;
+       addQ(x,y-2,2);
+      } 
+      if (y+3<N && dist[x][y+2][2] == -1)
+      {
+       dist[x][y+2][2] = dis+1;        
+       addQ(x,y+2,2);
+      }
+   }
+   else if (st == 1)
+   {
+      if (x-2 >=0 && dist[x-2][y][0] == -1)
+      {
+       dist[x-2][y][0] = dis+1;
+       addQ(x-2,y,0);
+      }
+      if (x+2 <M && dist[x+2][y][0] == -1)
+      {
+       dist[x+2][y][0] = dis+1;
+       addQ(x+2,y,0);
+      }
+      if (y-1>=0 && dist[x][y-1][1] == -1)
+      {
+       dist[x][y-1][1] = dis+1;
+       addQ(x,y-1,1);
+      } 
+      if (y+1<N && dist[x][y+1][1] == -1)
+      {
+       dist[x][y+1][1] = dis+1;        
+       addQ(x,y+1,1);
+      }
+   } 
+   else if (st == 2)
+   {
+      if (y-2 >=0 && dist[x][y-2][0] == -1)
+      {
+       dist[x][y-2][0] = dis+1;
+       addQ(x,y-2,0);
+      }
+      if (y+2 <N && dist[x][y+2][0] == -1)
+      {
+       dist[x][y+2][0] = dis+1;
+       addQ(x,y+2,0);
+      }
+      if (x-1>=0 && dist[x-1][y][2] == -1)
+      {
+       dist[x-1][y][2] = dis+1;
+       addQ(x-1,y,2);
+      } 
+      if (x+1<M && dist[x+1][y][2] == -1)
+      {
+       dist[x+1][y][2] = dis+1;        
+       addQ(x+1,y,2);
+      }
+   }  
+}
+
+int minMoves(int rows, int cols, vector <int> start, vector <int> target){
+
+memset(dist, -1, sizeof(dist));
+N=rows;
+M=cols;
+
+vector <int> st;
+st.push_back(start[1]);
+st.push_back(start[0]);
+st.push_back(0);
+
+dist[start[1]][start[0]][0]=0;
+Q.push(st);
+
+while (Q.size())
+{
+  cout << Q.size() << endl;
+  vector <int> cur = Q.front();
+  Q.pop();
+  if (cur[0] == target[1] && cur[1] == target[0] && cur[2] == 0)
+   return dist[target[1]][target[0]][0];
+  addN(cur);
+}
+
+return -1;
+
+}
+};

@@ -1,0 +1,75 @@
+/* dijkstra.cc          single-source shortest path algorithm
+ * Dijkstra's methed below calculates the length of the shortest path
+ * from a start vertex to all other verticies and puts this information
+ * in the map travelCosts. The graph is represented by a map mapping verticies
+ * into "adjacency sets" which are also stored as a maps.
+ * So a directed graph is a map of maps using standard STL containers.
+ * An STL priority_queue holds verticies of the graph ordered by increasing
+ * distance. 
+ * This program does not actually calculate the paths but that would be a minor
+ * modification. It would be necessary to store the "predecessor" of each vertex
+ * in another map. Whenever a shorter route to a vertex is found the vertex the
+ * edge comes from is stored in this latter map.
+ * The main function illustrates the use of the algorithm on a small map.
+ */
+#include <queue> // priority_queue
+#include <string>
+#include <iostream>
+#include <map>
+#include <algorithm>
+using namespace std;
+class Destination {
+public:
+ unsigned int distance;  string destination;  // need to be public below
+ Destination (string dt, unsigned int ds) : distance(ds), destination(dt) {}
+ 
+ bool operator< (const Destination & right) const {
+  return distance > right.distance; 
+ }  //reversed so smaller come first in priority_queue
+};
+typedef map<string, unsigned int> cityInfo;//shortest distance so far to each
+typedef map<string, cityInfo > graph; // map each vertex to its neighbours
+
+// Shortest path algorithm from p214 of C++ for Java programmers (T.Budd)
+// Corrections by A Sedgwick
+void dijkstra(graph& cityMap, string start, cityInfo & travelCosts)
+   // Dijkstra's single source shortest path algorithm
+{  // keep a priority queue of distances to cities
+   priority_queue <Destination> que;
+   que.push (Destination(start, 0));
+
+      // while queue not empty
+   while (! que.empty() ) {
+         // remove top entry from queue
+      string newCity = que.top().destination;
+      int cost = que.top().distance;
+      que.pop();
+         // if so far unvisited,
+      if (travelCosts.count(newCity) == 0) {
+            // visit it now
+         travelCosts[newCity] = cost;
+            // add reachable cities to list
+         cityInfo::iterator start = cityMap[newCity].begin();
+         cityInfo::iterator stop = cityMap[newCity].end();
+         for (; start != stop; ++start) {
+            string destCity = (*start).first;
+            unsigned int destDistance = (*start).second;
+            que.push(Destination(destCity, cost + destDistance));
+         }
+      }
+   }
+}
+int main() {
+ string hfx("halifax"), truro("truro"), moncton("moncton"), stjohn("st john");
+ graph g;
+ g[hfx][truro] = 100;
+ g[truro][moncton] = 130;
+ g[moncton][stjohn] = 200;
+ g[hfx][stjohn] = 400;
+ g[hfx][moncton] = 235;
+ cityInfo costs;
+ dijkstra( g, hfx, costs );
+ cityInfo::iterator it = costs.begin(), stop = costs.end();
+ for( ; it != stop ; it++ )
+  std::cout << "to " << it->first << " costs " << it->second << '\n';
+}

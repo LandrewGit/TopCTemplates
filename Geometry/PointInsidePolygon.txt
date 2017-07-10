@@ -1,0 +1,15 @@
+String testPoint(verts, x, y)
+{
+    int N = lengthof(verts);
+    int cnt = 0;
+    double x2 = random()*1000+1000;
+    double y2 = random()*1000+1000;
+    for(int i = 0; i<N; i++){
+        if(distPointToSegment(verts[i],verts[(i+1)%N],x,y) == 0)
+            return "BOUNDARY";
+        if(segmentsIntersect((verts[i],verts[(i+1)%N],{x,y},{x2,y2}))
+            cnt++;
+    }
+    if(cnt%2 == 0)return "EXTERIOR";
+    else return "INTERIOR";
+}

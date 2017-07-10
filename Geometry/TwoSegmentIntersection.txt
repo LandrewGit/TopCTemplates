@@ -1,0 +1,132 @@
+//Prewritten code starts here
+
+double tol = 0.000001;
+
+double Area2(double x1, double y1, double x2, double y2, double x3, double y3) 
+{ 
+  return ( (x2-x1)*(y3-y1)-(x3-x1)*(y2-y1) ); 
+} 
+
+bool Left(double x1, double y1, double x2, double y2, double x3, double y3) 
+{ 
+  return ( Area2(x1, y1, x2, y2, x3, y3) > 0); 
+} 
+
+bool Collinear(double x1, double y1, double x2, double y2, double x3, double y3) 
+{ 
+  return ( abs(Area2(x1, y1, x2, y2, x3, y3)) < tol); 
+} 
+
+bool IntersectProp(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) 
+{
+  if ( Collinear(x1, y1, x2, y2, x3, y3) || Collinear(x1, y1, x2, y2, x4, y4) ||
+       Collinear(x3, y3, x4, y4, x1, y1) || Collinear(x3, y3, x4, y4, x2, y2) )
+   return false;
+
+  return ( (!Left(x1, y1, x2, y2, x3, y3) ^ !Left(x1, y1, x2, y2, x4, y4) ) &&
+           (!Left(x3, y3, x4, y4, x1, y1) ^ !Left(x3, y3, x4, y4, x2, y2) )  );
+}
+
+bool Between(double x1, double y1, double x2, double y2, double x3, double y3) 
+{
+  if ( !Collinear(x1,y1,x2,y2,x3,y3) )
+    return false;
+
+  if ( abs(x1-x2) > tol )
+   return ((x1 <= x3) && (x3 <= x2)) || ((x1 >= x3) && (x3 >= x2)); 
+  else
+   return ((y1 <= y3) && (y3 <= y2)) || ((y1 >= y3) && (y3 >= y2));    
+} 
+
+bool Intersect(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) 
+{
+  if (IntersectProp(x1,y1,x2,y2,x3,y3,x4,y4))
+    return true;
+  else if (Between(x1,y1,x2,y2,x3,y3) || Between(x1,y1,x2,y2,x4,y4) || Between(x3,y3,x4,y4,x1,y1) || Between(x3,y3,x4,y4,x2,y2))
+    return true;
+  else
+    return false;
+}
+
+===========================================================================
+
+void Assigndi(double* px, double* py, double x, double y)
+{
+  *px=x;
+  *py=y;
+}
+
+char ParallelInt(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double* px, double* py)
+{
+  if (!Collinear(x1,y1,x2,y2,x3,y3) )
+    return '0';
+  if ( Between(x1,y1,x2,y2,x3,y3) )
+  {
+    Assigndi(px, py, x3, y3);
+    return 'e'; 
+  }
+  if ( Between(x1,y1,x2,y2,x4,y4) )
+  {
+    Assigndi(px, py, x4, y4);
+    return 'e'; 
+  }
+  if ( Between(x3,y3,x4,y4,x1,y1) )
+  {
+    Assigndi(px, py, x1, y1);
+    return 'e'; 
+  }
+  if ( Between(x3,y3,x4,y4,x2,y2) )
+  {
+    Assigndi(px, py, x2, y2);
+    return 'e'; 
+  }
+
+  return '0';
+}
+
+
+
+// Return codes:
+// 'e' The segments collinearly overlap, sharing a point (e - edge)
+// 'v' An endpoint of one segment is on the other segment, (v - vertex)
+// '1' Proper intersection
+// '0' Do not intersect
+
+
+char SegSegInt(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4, double* px, double* py)
+{
+  double s, t;
+  double num, denom;
+  char code = '?'; 
+
+  denom = x1*(y4-y3)+x2*(y3-y4)+x4*(y2-y1)+x3*(y1-y2);
+
+  if ( abs(denom) < tol )
+    return ParallelInt(x1,y1,x2,y2,x3,y3,x4,y4,px,py);
+
+  num = x1*(y4-y3)+x3*(y1-y4)+x4*(y3-y1);
+
+  if ( abs(num) < tol || abs(num-denom) < tol )
+    code = 'v';
+
+  s = num/denom;
+
+  num = -1*(x1*(y3-y2)+x2*(y1-y3)+x3*(y2-y1));
+
+  if ( abs(num) < tol || abs(num-denom) < tol )
+    code = 'v';
+
+  t = num/denom;
+
+  if ( (0.0 < s) && (s < 1.0) && (0.0 < t) && (t < 1.0) )
+    code = '1';
+  else if ( (0.0 > s) || (s > 1.0) || (0.0 > t) || (t > 1.0) )
+    code = '0';
+   
+  *px= x1+s*(x2-x1);
+  *py= y1+s*(y2-y1);
+
+  return code;
+}
+
+//Prewritten code ends here

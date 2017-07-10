@@ -1,0 +1,14 @@
+int mex(int base, int expo, int mod) 
+{
+   if (expo == 0) return 1;
+   if (expo % 2 == 0) 
+   { 
+      int temp = mex(base,expo/2,mod);
+      return (temp * temp) % mod;
+   } 
+   else 
+   {
+      return (base * mex(base,expo-1,mod)) % mod;
+   }
+}
+

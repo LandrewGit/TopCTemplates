@@ -1,0 +1,84 @@
+// another fine solution by misof
+// #includes {{{
+#include <algorithm>
+ 
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+ 
+#include <cstdio>
+#include <cstdlib>
+#include <cctype>
+#include <cassert>
+ 
+#include <cmath>
+#include <complex>
+using namespace std;
+// }}}
+ 
+/////////////////// PRE-WRITTEN CODE FOLLOWS, LOOK DOWN FOR THE SOLUTION ////////////////////////////////
+ 
+// pre-written code {{{
+#define FOREACH(it,c) for(__typeof((c).begin()) it=(c).begin();it!=(c).end();++it)
+typedef pair<int,int> PII;
+#define REP(i,n) for(int i=0;i<(int)(n);++i)
+#define SIZE(t) ((int)((t).size()))
+typedef vector<string> VS;
+vector<string> split( const string& s, const string& delim =" " ) { vector<string> res; string t; for ( unsigned int i = 0 ; i != s.size() ; i++ ) { if ( delim.find( s[i] ) != string::npos ) { if ( !t.empty() ) { res.push_back( t ); t = ""; } } else { t += s[i]; } } if ( !t.empty() ) { res.push_back(t); } return res; }
+// }}}
+ 
+/////////////////// CODE WRITTEN DURING THE COMPETITION FOLLOWS ////////////////////////////////
+ 
+class Smooshing {
+public:
+  int savings(vector <string> program) {
+    map<string,PII> keywords;
+  
+    string delim; for (char ch=32;ch<=126;ch++) if (!isalpha(ch)) delim += ch;
+    int mam = 0;
+    REP(i,SIZE(program)) {
+      VS V = split(program[i],delim);
+      REP(j,SIZE(V)) {
+        if (islower(V[j][0])) continue;
+        if (keywords.count(V[j])==0) {
+          keywords[V[j]]=PII(-1,mam++);
+        } else {
+          keywords[V[j]].first--;
+        }
+      }
+    }
+ 
+    typedef pair<PII,string> PSI;
+    vector<PSI> W;
+    FOREACH(it,keywords) W.push_back(PSI(it->second,it->first));
+    sort(W.begin(), W.end());
+ 
+    int res=0;
+    set<string> used;
+ 
+    FOREACH(it,W) {
+      string word = it->second;
+      int cnt = - (it->first).first;
+ 
+      string label; label += word[0];
+      int kde=0;
+      while (used.find(label) != used.end()) { kde=(kde+1) % SIZE(word); label+=word[kde]; }
+ 
+      res -= (SIZE(label) - SIZE(word)) * cnt;
+      used.insert(label);
+    }
+ 
+    return res;
+  }
+ 
+ 
+};
+ 
+ 
+// Powered by FileEdit
+// Powered by TZTester 1.01 [25-Feb-2003]
+// Powered by CodeProcessor

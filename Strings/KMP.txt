@@ -1,0 +1,70 @@
+//my implementation of Wikipedia's explanation of KMP
+
+int T[10000];
+
+void precompT(string w)
+{
+  int indt = 2;
+  int indw = 0;
+  int m = w.size();
+
+  T[0]=-1;
+  T[1]=0;
+
+  while (indt < m)
+  {
+      if (w[indt-1] == w[indw])
+	{
+        T[indt]=indw+1;
+	  indt++;
+	  indw++;
+	}
+	else if (indw > 0)
+	  indw = T[indw];
+	else
+	{
+        T[indt]=0;
+	  indt++;
+	}
+  }
+}
+
+int kmp(string s, string w)
+{
+  int n = s.size();
+  int m = w.size();
+
+  int inds = 0;
+  int indw = 0;
+
+  while (inds + indw < n)
+  {
+    if (w[indw] == s[inds+indw])
+	{
+        indw++;
+	  if (indw == m)
+	    return inds;
+	}
+	else
+	{
+        inds = inds + indw - T[indw];
+        if (indw > 0)
+	    indw = T[indw];
+	}
+  }
+
+  return -1;
+}
+
+int main()
+{
+  string a = "ABC ABCDAB ABCDABCDABDE";
+  string b = "ABCDABD";
+
+  memset(T, 0, sizeof(T));
+
+  precompT(b); 
+  int k = kmp(a,b);
+
+  return 0;
+}

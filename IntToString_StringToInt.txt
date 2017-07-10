@@ -1,0 +1,43 @@
+std::string itos(int arg)
+{
+    std::ostringstream buffer;
+    buffer << arg; 
+    return buffer.str(); 
+}
+
+------------------------------
+
+#include <cstdlib>
+#include <string>
+inline int stoi(std::string &s)
+{
+    return std::atoi(s.c_str());
+}
+
+//...
+int i = stoi(str);
+
+------------------------------
+
+#include <regex.h>
+
+------------------------------
+
+//string range  123123123-456456464564546
+long long a = atoll(range.c_str());
+long long b = atoll(strchr(range.c_str(),'-')+1);
+
+------------------------------
+
+long long a, b;
+char q;
+istringstream in(range);
+in >> a >> q >> b;
+
+------------------------------
+
+long long a,b;
+
+sscanf(range.c_str(), "%lli-%lli",&a, &b);
+
+

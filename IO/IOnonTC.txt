@@ -1,0 +1,166 @@
+#include <stdio.h> 
+
+int main(void) { 
+int x; 
+for(; scanf("%d",&x) > 0 && x != 42; printf("%d\n", x)); 
+return 0; 
+}
+
+
+int main( int argc, char* argv[] )
+{
+	int			nTriangles;
+	int			i, dummy;
+	FILE*		fin;
+	FILE*		fout;
+	
+	
+	fin = fopen( "triangle.in", "r" );
+	assert( fin != 0 );
+	fout = fopen( "triangle.out", "w" );
+	assert( fout != 0 );
+	
+	/* read the number of triangles */
+	dummy = fscanf( fin, "%d", &nTriangles );
+	assert( dummy == 1 );
+	
+	for (i = 0; i < nTriangles; i++) {
+	
+		/* read the six parameters */
+		/* input file: a, alpha, b, beta, c, gamma */
+		/* internal rep: a, gamma, b, alpha, c, beta */
+		dummy = fscanf( fin, "%lf %lf %lf %lf %lf %lf",
+			&p[0], &p[3], &p[2], &p[5], &p[4], &p[1] );
+		assert( dummy == 6 );
+		
+		CalculateTriangle( p, &err );
+		
+		/* write the result */
+		if ( err == errOk )
+			/* internal rep: a, gamma, b, alpha, c, beta */
+			/* output file: a, alpha, b, beta, c, gamma */
+			fprintf( fout, "%0.10f %0.10f %0.10f %0.10f %0.10f %0.10f\n",
+				p[0], p[3], p[2], p[5], p[4], p[1] );
+		else if ( err == errInvalidInput )
+			fprintf( fout, "Invalid input.\n" );
+		else if ( err == errManySolutions )
+			fprintf( fout, "More than one solution.\n" );
+		else
+			assert( FALSE );
+	}
+	
+	fclose( fin );
+	fclose( fout );
+	
+	return 0;
+}
+
+int upstream, downstream; cin >> upstream >> downstream; 
+cout << ':'; copy (table.outflow.begin(), table.outflow.end(), ostream_iterator<char>(cout,"")); cout << ":" << endl; 
+
+
+ifstream in("youwho.inp"); 
+unsigned studentId; 
+while (in >> studentId) 
+{ 
+unsigned nFriends; 
+in >> nFriends; 
+
+for (unsigned j = 0; j < nFriends; ++j) 
+{ 
+unsigned aFriend; 
+in >> aFriend; 
+unknowns_db[studentId-1] &= ~(l << (aFriend-1)); 
+} 
+++nStudents; 
+} 
+
+
+int NR; 
+cin >> NR; 
+while (cin >> x1 >> y1 >> x2 >> y2) 
+{ 
+}
+
+printf("%.2f\n", totalArea); 
+
+
+======================================
+
+  FILE * pFile;
+  pFile=fopen ("beads.txt","r");
+
+
+  char c = getc(pFile);
+  while ( c != '.')
+  {
+    a = a + c;
+	c = getc(pFile);
+  }
+  int x = getc(pFile);
+  while ( x != EOF)
+  {
+    c = x;
+    b = b + c;
+	x = getc(pFile);
+  }
+
+===========================================
+
+int N;
+
+fin >> N;
+
+for (int t=0; t<N; t++)
+{
+vector <string> names;
+vector <int> vals;
+map <string, int> M;
+M.clear();
+
+string na;
+string va;
+
+if (t == 0)
+ getline(fin,na);
+
+getline(fin,na);
+getline(fin,va);
+
+istringstream sin(na); 
+string v; 
+while (sin>>v) 
+  names.push_back(v); 
+
+int vv;
+istringstream sin2(va); 
+while (sin2>>vv) 
+  vals.push_back(vv); 
+
+int n = names.size();
+
+for (int i=0; i<n; i++)
+ M[names[i]]=vals[i];
+
+
+===============================
+
+
+//print 0.1234567 - exactly 7 digits after decimal point
+
+FILE* pFile;
+pFile = fopen("ou.txt","w");
+
+fprintf(pFile, "Case #%d: ", t+1);
+for (int i=0; i<roads.size()-1; i++)
+{
+   fprintf(pFile,"%9f",pro[i]);
+   fprintf(pFile," ");
+}
+
+fprintf(pFile,"%9f",pro[roads.size()-1]);
+fprintf(pFile,"\n");
+
+---
+
+fprintf(pFile,"%.7f\n",res); <- seven digits after decimal point

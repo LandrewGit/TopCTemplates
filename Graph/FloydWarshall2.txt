@@ -1,0 +1,12 @@
+/* first set non-existant edges to infinity */
+
+for (int i=0;i<N;i++) 
+{
+  for (int j=0;j<N;j++)
+  {
+     for (int k=0;k<N;k++) 
+     {
+        dis[j][k]=min(dis[j][k],dis[j][i]+dis[i][k]);
+     }
+  }
+}

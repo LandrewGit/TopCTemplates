@@ -1,0 +1,12 @@
+bool composite[1000001];
+
+memset(composite, false, sizeof(composite));
+
+for (int i = 2; i * i <= 1000000; i++)
+{
+  if (!composite[i]) 
+  {
+	for (int j = i + i; j <= 1000000; j += i)
+	   composite[j] = true;
+  }
+}

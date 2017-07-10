@@ -1,0 +1,14 @@
+__builtin_popcount(n)   //return number of 1 bits in n
+
+=======================================================
+
+//generate all subsets of N
+int N; //an integer
+int X = N;
+while (true)
+{
+    print X;
+    if( X == 0 )
+      break;
+    X = (X-1) & N;
+}

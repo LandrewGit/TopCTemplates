@@ -1,0 +1,17 @@
+public class Multifactorial { 
+  long INF = 1000000000000000000L; 
+   
+  public string calcMultiFact(int n, int k) { 
+    long res = 1; 
+    for (int z = n; z > 0; z -= k) 
+    { 
+      if (INF / z < res) 
+        return "overflow"; 
+      res *= z; 
+    } 
+    return res.ToString(); 
+  } 
+
+
+
+} 

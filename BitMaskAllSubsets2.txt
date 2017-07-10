@@ -1,0 +1,8 @@
+void enumerate(int s){  // s - bitmask representing the set
+  int a=s;
+  while(a){
+    doSomethingWith(a);
+    --a;
+    a&=s;
+  }
+}

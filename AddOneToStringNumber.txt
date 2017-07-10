@@ -1,0 +1,16 @@
+void addOne(string &oN)
+{
+  int i=oN.size()-1;
+  while (i >= 0)
+  {
+    if (oN[i] == '9') {
+      oN[i] = '0';
+      i--;
+    }
+    else {
+      oN[i]++;
+      break;
+    }
+  }
+  if (i == -1) oN = "1" + oN;
+}

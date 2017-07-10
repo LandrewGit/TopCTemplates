@@ -1,0 +1,41 @@
+int prim[100000];
+
+int genPrimes()
+{
+   prim[0]=2;
+   prim[1]=3;
+   int primSize = 2;
+
+   int curPr = 3;
+   int j = 3;
+
+   while (j <= upperBound )
+   {  
+     bool fou = false;
+     j = curPr+2;
+     while (!fou)
+     {
+       bool locFou = false;
+       for (int p=0; p < primSize && !locFou; p++)
+       {
+          if (j%prim[p] == 0)
+          {
+             locFou = true;
+          }
+       }
+       if (locFou)
+        j=j+2;
+       else
+       {
+        fou = true;
+        curPr = j;
+        if (j <= upperBound )
+		{
+          prim[primSize]=j;
+		  primSize++;
+		}        
+       }
+     }
+  }
+  return primSize;
+}

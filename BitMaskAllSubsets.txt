@@ -1,0 +1,19 @@
+static int dp[1 << 18];
+
+int SeparateConnections::howMany(vector <string> mat)
+{
+    int N = mat.size();
+    int N2 = 1 << N;
+    dp[0] = 0;
+    for (int i = 1; i < N2; i++)
+    {
+        int bot = i & ~(i - 1);
+        int use = __builtin_ctz(bot);
+        dp[i] = dp[i ^ bot];
+        for (int j = use + 1; j < N; j++)
+            if ((i & (1 << j)) && mat[use][j] == 'Y')
+                dp[i] = max(dp[i], dp[i ^ bot ^ (1 << j)] + 2);
+    }
+    return dp[N2 - 1];
+}
+

@@ -1,0 +1,12 @@
+long cnk(int n, int k)
+{
+  if (k > n)
+     return 0;
+  double ret = 1;
+  for (int i=1; i<= k; i++)
+  {
+    ret *= (n+1-i);
+    ret /= i;
+  }
+  return (long) ret;
+}

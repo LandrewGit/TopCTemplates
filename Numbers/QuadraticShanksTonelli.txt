@@ -1,0 +1,248 @@
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <deque>
+#include <stack>
+#include <bitset>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <queue>
+#include <stdio.h>
+#include <math.h>
+using namespace std;
+
+#define MAXN 9591
+
+
+
+//ofstream fout ("outp.txt");
+//ifstream fin ("inpu.txt");
+
+//map <int, int> NR;
+//map <int, int> PrimRem;
+//map <int, int> Power2;
+
+long long NR;
+long long PrimRem;
+long long Power2;
+
+// a^b mod p
+long long fastPower(long long a, long long b, long long p) 
+{
+   long long res = 1; 
+   while (b) 
+   { 
+     if (b % 2) 
+         res = (res*a)%p;
+     a   = (a*a)%p;
+     b=b/2;
+   }
+   return res;
+}
+
+bool isSq(long long a, long long p)
+{
+   long long d = fastPower(a, (p-1)/2, p);
+   if (d == 1)
+     return true;
+   else
+     return false;
+}
+
+long long inv(long long a, long long p)
+{
+   return fastPower(a, p-2, p);
+}
+
+
+//Shanks-Tonelli algorithm from Wikipedia
+long long roo(long long n, long long p)
+{
+   if (p%4 == 3)
+   {
+      return (fastPower(n, (p+1)/4, p));
+   }
+
+   if (p%8 == 5)
+   {
+      long long k1 = (p+3)/8;
+	  long long k2 =(2*k1-1)%p;
+	  long long k3 = fastPower(n, k2, p);
+      if (k3 == 1)
+	     return fastPower(n,k1, p);
+	  else if (k3 == p-1 )
+		 return ( (((p+1)/2)*fastPower((4*n)%p,k1,p))%p );
+   }
+   
+   long long invertN  = inv(n,p);
+   long long power2P  = Power2;
+   long long primremP = PrimRem;
+   long long r = fastPower(n,(primremP+1)/2, p);
+   long long v = fastPower(NR,primremP,p);
+   bool done = false;
+
+   while (!done)
+   {
+     long long i=0;
+     long long t = (r*r*invertN)%p; 
+     while (t != 1)
+     {
+       i++;
+       t = (t*t)%p;
+     }   
+     if (i == 0)
+        return r;
+     i = power2P-i-1;
+     long long ns = (1 << i);
+     ns = ns%p;
+     r = (r*fastPower(v,ns,p))%p; 
+   }   
+}
+
+void prin(vector<long long> ans, long long a, long long b, long long c, long long p)
+{
+   int n = ans.size();
+
+   cout << n;
+   for (int i=0; i<n; i++)
+     cout << " " << ans[i];
+   cout << endl;
+}
+
+void compP(long long p)
+{
+     long long t      = p;	
+	 long long t1     = t;
+     t1--;
+	 long long p2 = 0;
+	 while (t1%2 == 0)
+	 {
+       p2++;
+	   t1=t1/2;
+	 }
+
+	 PrimRem = t1;
+	 Power2  = p2;
+
+	 bool fou = false;
+     long long t3=2;
+     while (!fou)
+     {
+       long long t4 = fastPower(t3, (t-1)/2, t);
+	   if (t4 != 1)
+	   {
+         fou = true;
+         NR=t3; 
+	   }
+	   t3++;
+     }
+}
+
+long long convNeg(long long x, long long p)
+{
+   if (x >= 0)
+     return (x%p);
+
+   x=-x;
+   x=x%p;
+   return (p - x);   
+}
+
+int main(void) 
+{
+  //freopen("inpu.txt","r",stdin) ;
+  //freopen("outp.txt","w",stdout) ;
+
+
+  int T;	
+  //scanf("%d\n",&T) ;
+  cin >> T;
+
+  long long a,b,c,p;
+
+  for (int tt=0; tt<T; tt++)
+  {
+
+  cin >> a >> b >> c >> p;
+  //scanf("%d %d %d %d\n",&a, &b, &c, &p) ;
+
+  if (p != 2)
+    compP(p);
+
+  vector <long long> ans;
+  ans.clear();
+
+  if (p == 2)
+  {
+     if (c == 0)
+     {
+        ans.push_back(0);  
+     }
+     if ( (a+b+c)%p == 0)
+     {
+        ans.push_back(1);
+     }
+     prin(ans,a,b,c,p);
+     continue;
+    
+  }
+
+
+
+  long long d = (b*b - 4*a*c);
+  d=convNeg(d,p); 
+
+  if (d == 0 || d%p == 0)
+  {
+     long long inv2a = inv(2*a,p);
+	 long long rr = -b*inv2a;
+     long long r1 = convNeg(rr,p);
+     ans.push_back(r1);
+     prin(ans,a,b,c,p);
+     continue;      
+
+  }
+  else if (isSq(d, p))
+  { 
+     long long r1 = roo(d,p); 
+     long long r2 = r1; 
+     long long inv2a = inv(2*a,p);
+
+	 r1 = -b + r1;
+	 r1 = convNeg(r1,p);
+     r1 = r1*inv2a;
+	 r1 = convNeg(r1,p);
+
+	 r2 = -b - r2;
+	 r2 = convNeg(r2,p);
+     r2 = r2*inv2a;
+	 r2 = convNeg(r2,p);
+
+     ans.push_back(r1);
+     ans.push_back(r2);
+     sort(ans.begin(), ans.end());
+     prin(ans,a,b,c,p);
+     continue;      
+  }
+  else
+  {
+     prin(ans,a,b,c,p);
+     continue; 
+  }
+
+  }
+    return 0;
+}

@@ -1,0 +1,59 @@
+// Note - each re[i] has at most 26 elements
+
+long long RollingLetters::getTime(vector <string> re, string te) {
+
+vector <int> n;
+vector <int> a;
+REPSZ(i,re)
+{
+  n.push_back(re[i].size());
+  bool fou = false;
+  int j = 0;
+  while (j < re[i].size() && !fou)
+  {
+    if (re[i][j] == te[i])
+    {
+      fou = true;
+      a.push_back(j);
+    }
+    j++;
+  }
+  if (!fou)
+   return -1;
+}
+	
+int N = re.size();
+for (int i=0; i<N; i++)
+{
+  for (int j=0; j<N; j++)
+  {
+     if (i!=j)
+     {
+       int aa=a[i];
+       int bb=a[j];
+       int cc=gcd(n[i],n[j]);
+       aa=aa%cc;
+       bb=bb%cc;
+       if (aa != bb)
+         return -1;
+     }
+  }
+ }
+  
+  long long res = 0;
+  long long mo  = 1;
+  for (int i=0; i<N; i++)
+  {
+     int su = 0;
+     while ( res%n[i] != a[i] && su < 28 )
+     {
+       res = res + mo;
+       su++;
+     }
+     if (su > 27)
+      return -1;
+     mo = lcm(mo,n[i]); 
+  }
+  
+  return res;
+}

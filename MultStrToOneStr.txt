@@ -1,0 +1,10 @@
+   vector <string> doc;
+
+   string single;
+
+   int numS = doc.size();
+   for (int i=0; i< numS; i++)
+   {
+       for (int j=0; j<(doc[i]).size(); j++)
+           single.push_back(doc[i][j]);
+   }

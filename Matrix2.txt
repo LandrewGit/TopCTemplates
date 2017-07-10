@@ -1,0 +1,58 @@
+
+#include <iostream>
+#include <vector>
+ 
+using namespace std;
+ 
+class RingImposition{
+public:
+  vector<int> predict(vector<int>,int);
+};
+ 
+//matrix * vector
+vector<int > multiply(vector<vector<int> >& m,vector<int>& v){
+  vector<int> ret(v.size());
+  for(int i=0;i<m.size();i++)
+    for(int j=0;j<m.size();j++)
+      ret[j]=(ret[j]+v[i]*m[j][i])%100;
+  return ret;
+}
+ 
+//matrix * matrix
+vector<vector<int > > multiply(vector<vector<int> >& A,vector<vector<int> >& B){
+  vector<vector<int> > ret(A.size(),vector<int>(A.size()));
+  for(int i=0;i<A.size();i++)
+    for(int j=0;j<A.size();j++)
+      for(int k=0;k<A.size();k++)
+      ret[i][k]=(ret[i][k]+A[i][j]*B[j][k])%100;
+  return ret;
+}
+ 
+ 
+vector<vector<int> > power(vector<vector<int> > m,int exp){
+  vector<vector<int> > ret=m;
+  for(int i=0;i<ret.size();i++)
+    for(int j=0;j<ret.size();j++)
+      ret[i][j]=(i==j);
+  while(exp){
+    if(exp%2) ret=multiply(ret,m);
+    m=multiply(m,m);  
+    exp/=2;
+  }
+  return ret;
+}
+ 
+vector<int> RingImposition::predict(vector<int> v,int exponent){
+  //make a matrix
+  vector<vector<int> > m(v.size(),vector<int>(v.size()));
+  
+  //fill it with the transition
+  for(int i=0;i<v.size();i++)
+    m[i][i]=m[i][(i+1)%v.size()]=1;
+    
+  //apply exponent transitions to make new matrix
+  m=power(m,exponent);
+  
+  //apply new matrix to get result
+  return multiply(m,v);
+}

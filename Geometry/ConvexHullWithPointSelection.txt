@@ -1,0 +1,51 @@
+//If onEdge is true, use as many points as possible for
+ //the convex hull, otherwise as few as possible.
+    convexHull(point[] X, boolean onEdge){
+        int N = lengthof(X);
+        int p = 0;
+        boolean[] used = new boolean[N];
+        //First find the leftmost point
+        for(int i = 1; i<N; i++){
+            if(X[i] < X[p] || ((X[i] == X[p]) && (Y[i] > Y[p]))
+                p = i;
+        }
+        int start = p;
+        do{
+            int n = -1;
+            int dist = onEdge?INF:0;
+            for(int i = 0; i<N; i++){
+                //X[i] is the X in the discussion
+
+                //Don't go back to the same point you came from
+                if(i==p)continue;
+
+                //Don't go to a visited point
+                if(used[i])continue;
+
+                //If there is no N yet, set it to X
+                if(n == -1)n = i;
+                int cross = (X[i] - X[p]) x (X[n] - X[p]);
+
+                //d is the distance from P to X
+                int d = (X[i] - X[p]) ? (X[i] - X[p]);
+                if(cross < 0){
+                    //As described above, set N=X
+                    n = i;
+                    dist = d;
+                }else if(cross == 0){
+                    //In this case, both N and X are in the
+                    //same direction.  If onEdge is true, pick the
+                    //closest one, otherwise pick the farthest one.
+                    if(onEdge && d < dist){
+                        dist = d;
+                        n = i;
+                    }else if(!onEdge && d > dist){
+                        dist = d;
+                        n = i;
+                    }
+                }
+            }
+            p = n;
+            used[p] = true;
+        }while(start!=p);
+    }

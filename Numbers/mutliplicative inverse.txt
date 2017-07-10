@@ -1,0 +1,38 @@
+
+// find x s.t a*x=1 mod m
+
+vector <int> r = extgcd(a,m);
+int x = (r[0]+m)%m;
+
+
+
+// finds x,y s.t x*a+y*b=gcd(a,b)
+vector <int> extgcd(long long a, long long b)
+{
+   long long x = 0;
+   long long y = 1;
+   long long lastx = 1;
+   long long lasty = 0;
+   while (b != 0)
+   {
+     long long temp = b;
+     long long quot = a/b;
+     b = a%b;
+     a = temp;
+
+     temp = x;
+     x = lastx - quot*x;
+     lastx = temp;
+
+     temp = y;
+     y = lasty - quot*y;
+     lasty = temp;
+   }
+
+   vector <int> res;
+   res.push_back(lastx);
+   res.push_back(lasty);
+   res.push_back(a);
+
+   return res;
+}
